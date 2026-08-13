@@ -1,4 +1,5 @@
 import { useState, type FormEventHandler } from "react";
+import { Alert, Box, Button, TextField, Typography } from "@mui/material";
 import { login } from "../services/authApi";
 import { ApiError } from "../services/apiError";
 import type { AuthSession } from "../types/user";
@@ -8,8 +9,8 @@ interface LoginFormProps {
 }
 
 function LoginForm({ onSuccess }: LoginFormProps) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("geraldo@cms.dev");
+  const [password, setPassword] = useState("senha123");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -33,35 +34,51 @@ function LoginForm({ onSuccess }: LoginFormProps) {
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <h1>Sign in</h1>
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{
+        maxWidth: 360,
+        mx: "auto",
+        mt: 8,
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+      }}
+    >
+      <Typography variant="h5" component="h1">
+        Sign in
+      </Typography>
 
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          required
-        />
+      <TextField
+        label="Email"
+        type="email"
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+        required
+        fullWidth
+      />
 
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          required
-        />
+      <TextField
+        label="Password"
+        type="password"
+        value={password}
+        onChange={(event) => setPassword(event.target.value)}
+        required
+        fullWidth
+      />
 
-        {error && <p role="alert">{error}</p>}
+      {error && <Alert severity="error">{error}</Alert>}
 
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Signing in..." : "Sign in"}
-        </button>
-      </form>
-    </>
+      <Button
+        type="submit"
+        variant="contained"
+        disabled={isSubmitting}
+        fullWidth
+      >
+        {isSubmitting ? "Signing in..." : "Sign in"}
+      </Button>
+    </Box>
   );
 }
 
