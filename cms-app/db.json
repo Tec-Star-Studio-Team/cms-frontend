@@ -1,0 +1,11 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Geraldo Borges",
+      "email": "geraldo@cms.dev",
+      "password": "senha123",
+      "role": "admin"
+    }
+  ]
+}
