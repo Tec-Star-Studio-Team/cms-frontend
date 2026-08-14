@@ -1,16 +1,22 @@
-import { useState } from "react";
+import { lazy, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import "./App.css";
 import LoginForm from "./features/auth/LoginForm";
 import AppLayout from "./components/layout/AppLayout";
-import PlaceholderPage from "./pages/PlaceholderPage";
 import type { AuthSession } from "./features/auth/user";
-import AppCreatePage from "./features/apps/AppCreatePage";
-import AppsListPage from "./features/apps/AppsListPage";
-import TemplateCreatePage from "./features/templates/TemplateCreatePage";
-import TemplatesListPage from "./features/templates/TemplatesListPage";
-import TemplateEditPage from "./features/templates/TemplateEditPage";
-import AppEditPage from "./features/apps/AppEditPage";
+
+const PlaceholderPage = lazy(() => import("./pages/PlaceholderPage"));
+const AppsListPage = lazy(() => import("./features/apps/AppsListPage"));
+const AppCreatePage = lazy(() => import("./features/apps/AppCreatePage"));
+const AppEditPage = lazy(() => import("./features/apps/AppEditPage"));
+const TemplatesListPage = lazy(
+  () => import("./features/templates/TemplatesListPage"),
+);
+const TemplateCreatePage = lazy(
+  () => import("./features/templates/TemplateCreatePage"),
+);
+const TemplateEditPage = lazy(
+  () => import("./features/templates/TemplateEditPage"),
+);
 
 function App() {
   const [session, setSession] = useState<AuthSession | null>(null);
