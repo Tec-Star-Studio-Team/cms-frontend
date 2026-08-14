@@ -1,8 +1,8 @@
 import { useState, type FormEventHandler } from "react";
 import { Alert, Box, Button, TextField, Typography } from "@mui/material";
-import { login } from "../services/authApi";
-import { ApiError } from "../services/apiError";
-import type { AuthSession } from "../types/user";
+import { login } from "@/features/auth/authApi";
+import { ApiError } from "../../apiError";
+import type { AuthSession } from "./user";
 
 interface LoginFormProps {
   onSuccess: (session: AuthSession) => void;

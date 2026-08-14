@@ -1,5 +1,5 @@
-import { ApiError } from "./apiError";
-import type { AuthSession, LoginCredentials, User } from "../types/user";
+import { ApiError } from "@/apiError";
+import type { AuthSession, LoginCredentials, User } from "./user";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
