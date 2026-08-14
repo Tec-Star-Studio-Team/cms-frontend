@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
+  Collapse,
   CircularProgress,
   IconButton,
   Table,
@@ -15,6 +16,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import TemplateAppsPanel from "./TemplateAppsPanel";
 import {
   useTemplatesQuery,
   useRemoveTemplateMutation,
@@ -27,6 +29,9 @@ function TemplatesListPage() {
   const { data: templates, isLoading, isError } = useTemplatesQuery();
   const removeTemplateMutation = useRemoveTemplateMutation();
   const [templateToDelete, setTemplateToDelete] = useState<Template | null>(
+    null,
+  );
+  const [expandedTemplateId, setExpandedTemplateId] = useState<string | null>(
     null,
   );
 
@@ -76,21 +81,53 @@ function TemplatesListPage() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {templates.map((template) => (
-            <TableRow key={template.id}>
-              <TableCell>{template.name}</TableCell>
-              <TableCell align="right">
-                <IconButton
-                  onClick={() => navigate(`/templates/${template.id}/edit`)}
-                >
-                  <EditIcon />
-                </IconButton>
-                <IconButton onClick={() => setTemplateToDelete(template)}>
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
-            </TableRow>
-          ))}
+          {templates.map((template) => {
+            const isExpanded = expandedTemplateId === template.id;
+
+            return (
+              <Fragment key={template.id}>
+                <TableRow>
+                  <TableCell>
+                    <Button
+                      variant="text"
+                      onClick={() =>
+                        setExpandedTemplateId(isExpanded ? null : template.id)
+                      }
+                    >
+                      {template.name}
+                    </Button>
+                  </TableCell>
+                  <TableCell align="right">
+                    <IconButton
+                      onClick={() => navigate(`/templates/${template.id}/edit`)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton onClick={() => setTemplateToDelete(template)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell
+                    colSpan={2}
+                    sx={{
+                      py: 0,
+                      borderBottom: isExpanded ? undefined : "none",
+                    }}
+                  >
+                    <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+                      <TemplateAppsPanel
+                        templateId={template.id}
+                        isExpanded={isExpanded}
+                      />
+                    </Collapse>
+                  </TableCell>
+                </TableRow>
+              </Fragment>
+            );
+          })}
         </TableBody>
       </Table>
 

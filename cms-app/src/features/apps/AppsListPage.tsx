@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -15,36 +15,17 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { listApps, removeApp } from "./appsApi";
 import type { App } from "./types";
 import { useTemplates } from "../templates/hooks/useTemplates";
+import { useAppsQuery, useRemoveAppMutation } from "./appsQueries";
 import ConfirmDialog from "@/components/layout/ConfirmDialog";
 
 function AppsListPage() {
   const navigate = useNavigate();
   const { templates } = useTemplates();
-  const [apps, setApps] = useState<App[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: apps, isLoading, isError } = useAppsQuery();
+  const removeAppMutation = useRemoveAppMutation();
   const [appToDelete, setAppToDelete] = useState<App | null>(null);
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    listApps(controller.signal)
-      .then((data) => {
-        setApps(data);
-        setIsLoading(false);
-      })
-      .catch((error: unknown) => {
-        if (error instanceof DOMException && error.name === "AbortError")
-          return;
-        console.error(error);
-        setIsLoading(false);
-      });
-
-    return () => controller.abort();
-  }, []);
 
   function templateName(templateId: string) {
     return (
@@ -55,20 +36,16 @@ function AppsListPage() {
   async function handleConfirmDelete() {
     if (!appToDelete) return;
 
-    setIsDeleting(true);
-    try {
-      await removeApp(appToDelete.id);
-      setApps((prev) => prev.filter((app) => app.id !== appToDelete.id));
-      setAppToDelete(null);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsDeleting(false);
-    }
+    await removeAppMutation.mutateAsync(appToDelete.id);
+    setAppToDelete(null);
   }
 
   if (isLoading) {
     return <CircularProgress />;
+  }
+
+  if (isError || !apps) {
+    return <Typography color="error">Unable to load apps.</Typography>;
   }
 
   return (
@@ -125,7 +102,7 @@ function AppsListPage() {
         title="Delete app"
         description={`Are you sure you want to delete "${appToDelete?.name}"? This action cannot be undone.`}
         confirmLabel="Delete"
-        isConfirming={isDeleting}
+        isConfirming={removeAppMutation.isPending}
         onConfirm={handleConfirmDelete}
         onCancel={() => setAppToDelete(null)}
       />

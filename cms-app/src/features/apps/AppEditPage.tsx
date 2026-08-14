@@ -1,39 +1,22 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import { CircularProgress, Typography } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
 import AppForm from "./AppForm";
-import { getApp, updateApp } from "./appsApi";
 import type { AppFormValues } from "./appSchema";
-import type { App } from "./types";
+import { useAppQuery, useUpdateAppMutation } from "./appsQueries";
 
 function AppEditPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [app, setApp] = useState<App | null>(null);
-
-  useEffect(() => {
-    if (!id) return;
-
-    const controller = new AbortController();
-
-    getApp(id, controller.signal)
-      .then(setApp)
-      .catch((error: unknown) => {
-        if (error instanceof DOMException && error.name === "AbortError")
-          return;
-        console.error(error);
-      });
-
-    return () => controller.abort();
-  }, [id]);
+  const { data: app, isLoading } = useAppQuery(id ?? "");
+  const updateAppMutation = useUpdateAppMutation(id ?? "");
 
   async function handleSubmit(values: AppFormValues) {
     if (!id) return;
-    await updateApp(id, values);
+    await updateAppMutation.mutateAsync(values);
     navigate("/apps");
   }
 
-  if (!app) {
+  if (isLoading || !app) {
     return <CircularProgress />;
   }
 
