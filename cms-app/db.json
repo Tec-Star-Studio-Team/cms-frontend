@@ -8,13 +8,7 @@
       "role": "admin"
     }
   ],
-  "apps": [
-    {
-      "name": "Teste 1",
-      "templateId": "m30aPiY-HjU",
-      "id": "6sEqHFt6-7Y"
-    }
-  ],
+  "apps": [],
   "templates": [
     {
       "name": "ICTL 1.0",
