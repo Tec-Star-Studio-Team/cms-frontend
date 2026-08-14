@@ -1,5 +1,6 @@
 import { ApiError } from "@/apiError";
 import type { AuthSession, LoginCredentials, User } from "./user";
+import { apiFetch } from "@/lib/apiFetch";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -12,7 +13,7 @@ export async function login({
   password,
 }: LoginCredentials): Promise<AuthSession> {
   const query = new URLSearchParams({ email, password });
-  const response = await fetch(`${API_URL}/users?${query.toString()}`);
+  const response = await apiFetch(`${API_URL}/users?${query.toString()}`);
 
   if (!response.ok) {
     throw new ApiError("Unable to connect to the server", response.status);
