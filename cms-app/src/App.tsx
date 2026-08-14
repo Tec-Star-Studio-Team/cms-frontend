@@ -9,6 +9,7 @@ import AppCreatePage from "./features/apps/AppCreatePage";
 import AppsListPage from "./features/apps/AppsListPage";
 import TemplateCreatePage from "./features/templates/TemplateCreatePage";
 import TemplatesListPage from "./features/templates/TemplatesListPage";
+import TemplateEditPage from "./features/templates/TemplateEditPage";
 
 function App() {
   const [session, setSession] = useState<AuthSession | null>(null);
@@ -24,6 +25,7 @@ function App() {
         <Route path="/apps/new" element={<AppCreatePage />} />
         <Route path="/templates" element={<TemplatesListPage />} />
         <Route path="/templates/new" element={<TemplateCreatePage />} />
+        <Route path="/templates/:id/edit" element={<TemplateEditPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>
