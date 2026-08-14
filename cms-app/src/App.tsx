@@ -1,7 +1,14 @@
 import { useState } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
-import LoginForm from "./components/LoginForm";
-import type { AuthSession } from "./types/user";
+import LoginForm from "./features/auth/LoginForm";
+import AppLayout from "./components/layout/AppLayout";
+import PlaceholderPage from "./pages/PlaceholderPage";
+import type { AuthSession } from "./features/auth/user";
+import AppCreatePage from "./features/apps/AppCreatePage";
+import AppsListPage from "./features/apps/AppsListPage";
+import TemplateCreatePage from "./features/templates/TemplateCreatePage";
+import TemplatesListPage from "./features/templates/TemplatesListPage";
 
 function App() {
   const [session, setSession] = useState<AuthSession | null>(null);
@@ -10,12 +17,16 @@ function App() {
   }
 
   return (
-    <>
-      <div>
-        <h1>CMS</h1>
-        <p>Welcome, {session.user.name}</p>
-      </div>
-    </>
+    <Routes>
+      <Route element={<AppLayout />}>
+        <Route path="/" element={<PlaceholderPage title="Dashboard" />} />
+        <Route path="/apps" element={<AppsListPage />} />
+        <Route path="/apps/new" element={<AppCreatePage />} />
+        <Route path="/templates" element={<TemplatesListPage />} />
+        <Route path="/templates/new" element={<TemplateCreatePage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Route>
+    </Routes>
   );
 }
 
