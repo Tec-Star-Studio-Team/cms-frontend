@@ -1,14 +1,15 @@
 import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import TemplateForm from "./TemplateForm";
-import { createTemplate } from "./templatesApi";
 import type { TemplateFormValues } from "./templateSchema";
+import { useCreateTemplateMutation } from "./templateQueries";
 
 function TemplateCreatePage() {
   const navigate = useNavigate();
+  const createTemplateMutation = useCreateTemplateMutation();
 
   async function handleSubmit(values: TemplateFormValues) {
-    await createTemplate(values);
+    await createTemplateMutation.mutateAsync(values);
     navigate("/templates");
   }
 

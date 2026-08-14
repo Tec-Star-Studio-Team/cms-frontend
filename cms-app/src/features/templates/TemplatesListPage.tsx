@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Alert,
   Box,
   Button,
+  CircularProgress,
   IconButton,
   Table,
   TableBody,
@@ -15,70 +15,34 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { listTemplates, removeTemplate } from "./templatesApi";
+import {
+  useTemplatesQuery,
+  useRemoveTemplateMutation,
+} from "./templateQueries";
 import type { Template } from "./types";
-import { CircularProgress } from "@mui/material";
 import ConfirmDialog from "@/components/layout/ConfirmDialog";
 
 function TemplatesListPage() {
   const navigate = useNavigate();
-  const [templates, setTemplates] = useState<Template[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data: templates, isLoading, isError } = useTemplatesQuery();
+  const removeTemplateMutation = useRemoveTemplateMutation();
   const [templateToDelete, setTemplateToDelete] = useState<Template | null>(
     null,
   );
-  const [isDeleting, setIsDeleting] = useState(false);
 
-  useEffect(() => {
-    const controller = new AbortController();
+  async function handleConfirmDelete() {
+    if (!templateToDelete) return;
 
-    listTemplates(controller.signal)
-      .then((data) => {
-        setTemplates(data);
-        setIsLoading(false);
-      })
-      .catch((error: unknown) => {
-        if (error instanceof DOMException && error.name === "AbortError")
-          return;
-        console.error(error);
-        setError("Unable to load templates");
-        setIsLoading(false);
-      });
-
-    return () => controller.abort();
-  }, []);
+    await removeTemplateMutation.mutateAsync(templateToDelete.id);
+    setTemplateToDelete(null);
+  }
 
   if (isLoading) {
     return <CircularProgress />;
   }
 
-  if (error) return <Alert severity="error">{error}</Alert>;
-
-  async function handleRemoveTemplate() {
-    if (!templateToDelete) return;
-
-    setIsLoading(true);
-    setIsDeleting(true);
-
-    await removeTemplate(templateToDelete.id)
-      .then(() => {
-        setIsLoading(false);
-        setIsDeleting(false);
-      })
-      .catch((error: unknown) => {
-        if (error instanceof DOMException && error.name === "AbortError")
-          return;
-        console.error(error);
-        setError("Unable to load templates");
-        setIsLoading(false);
-        setIsDeleting(false);
-      });
-
-    setTemplates((prev) =>
-      prev.filter((template) => template.id !== templateToDelete.id),
-    );
-    setTemplateToDelete(null);
+  if (isError || !templates) {
+    return <Typography color="error">Unable to load templates.</Typography>;
   }
 
   return (
@@ -135,8 +99,8 @@ function TemplatesListPage() {
         title="Delete template"
         description={`Are you sure you want to delete "${templateToDelete?.name}"? This action cannot be undone.`}
         confirmLabel="Delete"
-        isConfirming={isDeleting}
-        onConfirm={handleRemoveTemplate}
+        isConfirming={removeTemplateMutation.isPending}
+        onConfirm={handleConfirmDelete}
         onCancel={() => setTemplateToDelete(null)}
       />
     </Box>

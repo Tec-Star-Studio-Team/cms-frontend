@@ -44,3 +44,11 @@
 ### Install React Hook Form and Zod
 
 `npm install react-hook-form zod @hookform/resolvers`
+
+### Install TanStack Query
+
+For API calls, retry, caching, cache invalidation etc
+
+`npm install @tanstack/react-query`
+
+`npm install -D @tanstack/react-query-devtools`
