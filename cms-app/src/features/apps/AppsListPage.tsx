@@ -1,8 +1,35 @@
+import { Box, Typography, Button } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import { useNavigate } from "react-router-dom";
+
 function AppsListPage() {
+  const navigate = useNavigate();
+
   return (
-    <>
-      <h1>Apps List Page</h1>
-    </>
+    <Box>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          mb: 3,
+        }}
+      >
+        <Typography variant="h4" component="h1">
+          Apps
+        </Typography>
+
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={() => navigate("/apps/new")}
+        >
+          New app
+        </Button>
+      </Box>
+
+      {/* AppsTable goes here next */}
+    </Box>
   );
 }
 
