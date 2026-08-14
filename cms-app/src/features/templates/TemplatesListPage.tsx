@@ -18,12 +18,17 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { listTemplates, removeTemplate } from "./templatesApi";
 import type { Template } from "./types";
 import { CircularProgress } from "@mui/material";
+import ConfirmDialog from "@/components/layout/ConfirmDialog";
 
 function TemplatesListPage() {
   const navigate = useNavigate();
   const [templates, setTemplates] = useState<Template[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [templateToDelete, setTemplateToDelete] = useState<Template | null>(
+    null,
+  );
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -50,17 +55,16 @@ function TemplatesListPage() {
 
   if (error) return <Alert severity="error">{error}</Alert>;
 
-  async function handleRemoveTemplate(id: string) {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this template?",
-    );
-    if (!confirmed) return;
+  async function handleRemoveTemplate() {
+    if (!templateToDelete) return;
 
     setIsLoading(true);
+    setIsDeleting(true);
 
-    await removeTemplate(id)
+    await removeTemplate(templateToDelete.id)
       .then(() => {
         setIsLoading(false);
+        setIsDeleting(false);
       })
       .catch((error: unknown) => {
         if (error instanceof DOMException && error.name === "AbortError")
@@ -68,9 +72,13 @@ function TemplatesListPage() {
         console.error(error);
         setError("Unable to load templates");
         setIsLoading(false);
+        setIsDeleting(false);
       });
 
-    setTemplates((prev) => prev.filter((template) => template.id !== id));
+    setTemplates((prev) =>
+      prev.filter((template) => template.id !== templateToDelete.id),
+    );
+    setTemplateToDelete(null);
   }
 
   return (
@@ -113,7 +121,7 @@ function TemplatesListPage() {
                 >
                   <EditIcon />
                 </IconButton>
-                <IconButton onClick={() => handleRemoveTemplate(template.id)}>
+                <IconButton onClick={() => setTemplateToDelete(template)}>
                   <DeleteIcon />
                 </IconButton>
               </TableCell>
@@ -121,6 +129,16 @@ function TemplatesListPage() {
           ))}
         </TableBody>
       </Table>
+
+      <ConfirmDialog
+        open={templateToDelete !== null}
+        title="Delete template"
+        description={`Are you sure you want to delete "${templateToDelete?.name}"? This action cannot be undone.`}
+        confirmLabel="Delete"
+        isConfirming={isDeleting}
+        onConfirm={handleRemoveTemplate}
+        onCancel={() => setTemplateToDelete(null)}
+      />
     </Box>
   );
 }
