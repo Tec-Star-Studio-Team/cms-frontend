@@ -8,7 +8,22 @@
       "role": "admin"
     }
   ],
-  "apps": [],
-  "templates": [],
+  "apps": [
+    {
+      "name": "Teste 1",
+      "templateId": "m30aPiY-HjU",
+      "id": "6sEqHFt6-7Y"
+    }
+  ],
+  "templates": [
+    {
+      "name": "ICTL 1.0",
+      "id": "rkre2sPOgNI"
+    },
+    {
+      "name": "Animal Facts",
+      "id": "m30aPiY-HjU"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }

@@ -10,6 +10,7 @@ import AppsListPage from "./features/apps/AppsListPage";
 import TemplateCreatePage from "./features/templates/TemplateCreatePage";
 import TemplatesListPage from "./features/templates/TemplatesListPage";
 import TemplateEditPage from "./features/templates/TemplateEditPage";
+import AppEditPage from "./features/apps/AppEditPage";
 
 function App() {
   const [session, setSession] = useState<AuthSession | null>(null);
@@ -23,6 +24,7 @@ function App() {
         <Route path="/" element={<PlaceholderPage title="Dashboard" />} />
         <Route path="/apps" element={<AppsListPage />} />
         <Route path="/apps/new" element={<AppCreatePage />} />
+        <Route path="/apps/:id/edit" element={<AppEditPage />} />
         <Route path="/templates" element={<TemplatesListPage />} />
         <Route path="/templates/new" element={<TemplateCreatePage />} />
         <Route path="/templates/:id/edit" element={<TemplateEditPage />} />
