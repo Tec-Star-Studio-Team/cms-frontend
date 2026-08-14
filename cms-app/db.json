@@ -9,6 +9,15 @@
     }
   ],
   "apps": [],
-  "templates": [],
+  "templates": [
+    {
+      "name": "ICTL 1.0",
+      "id": "rkre2sPOgNI"
+    },
+    {
+      "name": "Animal Facts",
+      "id": "m30aPiY-HjU"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }
