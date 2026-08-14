@@ -16,7 +16,7 @@ function AppsListPage() {
         }}
       >
         <Typography variant="h4" component="h1">
-          Apps
+          Apps1
         </Typography>
 
         <Button
