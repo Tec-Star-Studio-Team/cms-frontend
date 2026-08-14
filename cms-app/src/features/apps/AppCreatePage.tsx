@@ -1,14 +1,15 @@
 import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import AppForm from "./AppForm";
-import { createApp } from "./appsApi";
 import type { AppFormValues } from "./appSchema";
+import { useCreateAppMutation } from "./appsQueries";
 
 function AppCreatePage() {
   const navigate = useNavigate();
+  const createAppMutation = useCreateAppMutation();
 
   async function handleSubmit(values: AppFormValues) {
-    await createApp(values);
+    await createAppMutation.mutateAsync(values);
     navigate("/apps");
   }
 

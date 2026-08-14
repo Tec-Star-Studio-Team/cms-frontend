@@ -25,6 +25,25 @@ export async function getApp(id: string, signal?: AbortSignal): Promise<App> {
   return response.json();
 }
 
+export async function listAppsByTemplate(
+  templateId: string,
+  signal?: AbortSignal,
+): Promise<App[]> {
+  const query = new URLSearchParams({ templateId });
+  const response = await apiFetch(`${API_URL}/apps?${query.toString()}`, {
+    signal,
+  });
+
+  if (!response.ok) {
+    throw new ApiError(
+      "Unable to load apps for this template",
+      response.status,
+    );
+  }
+
+  return response.json();
+}
+
 export async function createApp(values: AppFormValues): Promise<App> {
   const response = await apiFetch(`${API_URL}/apps`, {
     method: "POST",
