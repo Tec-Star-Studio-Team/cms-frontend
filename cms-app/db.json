@@ -18,6 +18,11 @@
       "name": "aaaaaaaaa",
       "templateId": "rkre2sPOgNI",
       "id": "tBRiaf0lFDg"
+    },
+    {
+      "name": "BBBB",
+      "templateId": "NPS8qtnJKcY",
+      "id": "T9t1u1aq2ao"
     }
   ],
   "templates": [
@@ -36,6 +41,10 @@
     {
       "name": "aaaaaa",
       "id": "fMJwygrBvO4"
+    },
+    {
+      "name": "Geraldo",
+      "id": "NPS8qtnJKcY"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
