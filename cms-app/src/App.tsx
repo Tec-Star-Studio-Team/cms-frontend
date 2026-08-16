@@ -17,6 +17,15 @@ const TemplateCreatePage = lazy(
 const TemplateEditPage = lazy(
   () => import("./features/templates/TemplateEditPage"),
 );
+const ProjectsListPage = lazy(
+  () => import("./features/projects/ProjectsListPage"),
+);
+const ProjectCreatePage = lazy(
+  () => import("./features/projects/ProjectCreatePage"),
+);
+const ProjectEditPage = lazy(
+  () => import("./features/projects/ProjectEditPage"),
+);
 
 function App() {
   const { session, login } = useAuth();
@@ -35,6 +44,9 @@ function App() {
         <Route path="/templates" element={<TemplatesListPage />} />
         <Route path="/templates/new" element={<TemplateCreatePage />} />
         <Route path="/templates/:id/edit" element={<TemplateEditPage />} />
+        <Route path="/projects" element={<ProjectsListPage />} />
+        <Route path="/projects/new" element={<ProjectCreatePage />} />
+        <Route path="/projects/:id/edit" element={<ProjectEditPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>
