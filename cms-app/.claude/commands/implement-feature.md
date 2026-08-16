@@ -1,5 +1,5 @@
 ---
-description: Implement a CRUD feature by name, following PRD → Spec → Implementation → Verification, then commit and push it to its feature branch.
+description: Implement a CRUD feature by name, following PRD → Spec → Implementation → Verification, then commit it to its feature branch.
 argument-hint: <feature-name>
 ---
 
@@ -32,12 +32,6 @@ result of every item. If any item fails, stop here — do not commit. 5. Only if
      git commit -m "feat: implement $ARGUMENTS"
 ```
 
-- Push the feature branch:
-
-```bash
-     git push -u origin feature/NNN-$ARGUMENTS
-```
-
-6. Summarize what changed, confirm the branch was pushed, and remind the
+6. Summarize what changed, remind the
    developer that opening and merging the Pull Request into `main` is a
    manual step — this command never does that on its own.
