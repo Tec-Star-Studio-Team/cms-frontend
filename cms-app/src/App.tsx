@@ -2,7 +2,7 @@ import { lazy, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import LoginForm from "./features/auth/LoginForm";
 import AppLayout from "./components/layout/AppLayout";
-import type { AuthSession } from "./features/auth/user";
+import { useAuth } from "./features/auth/AuthContext";
 
 const PlaceholderPage = lazy(() => import("./pages/PlaceholderPage"));
 const AppsListPage = lazy(() => import("./features/apps/AppsListPage"));
@@ -19,9 +19,10 @@ const TemplateEditPage = lazy(
 );
 
 function App() {
-  const [session, setSession] = useState<AuthSession | null>(null);
+  const { session, login } = useAuth();
+
   if (!session) {
-    return <LoginForm onSuccess={setSession} />;
+    return <LoginForm onSuccess={login} />;
   }
 
   return (
