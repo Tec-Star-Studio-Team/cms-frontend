@@ -17,6 +17,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import AppsIcon from "@mui/icons-material/Apps";
 import ViewQuiltIcon from "@mui/icons-material/ViewQuilt";
+import FolderIcon from "@mui/icons-material/Folder";
 import { useAuth } from "@/features/auth/AuthContext";
 
 const EXPANDED_WIDTH = 240;
@@ -32,6 +33,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Dashboard", icon: <DashboardIcon />, path: "/" },
   { label: "Apps", icon: <AppsIcon />, path: "/apps" },
   { label: "Templates", icon: <ViewQuiltIcon />, path: "/templates" },
+  { label: "Projects", icon: <FolderIcon />, path: "/projects" },
 ];
 
 interface SidebarProps {

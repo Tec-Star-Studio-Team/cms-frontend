@@ -7,7 +7,7 @@ passes the verification checklist.
 
 | ID  | Feature  | PRD                       | Spec                        | Status      | Branch                |
 |-----|----------|----------------------------|-------------------------------|-------------|------------------------|
-| 001 | Projects | docs/prd/001-projects.md   | docs/specs/001-projects.md    | Not Started | feature/001-projects   |
+| 001 | Projects | docs/prd/001-projects.md   | docs/specs/001-projects.md    | Implemented | feature/001-projects   |
 
 ## Status values
 - `Not Started` — PRD/Spec exist, implementation hasn't begun.
