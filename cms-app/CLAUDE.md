@@ -89,6 +89,13 @@ skill under `.claude/skills/` for the full step-by-step):
 4. Verify against `docs/harness/verification-checklist.md`, then update
    the feature's status in `docs/features-log.md` before considering the
    feature done.
+   
+## Git Workflow & Safety Rules
+
+- The `/implement-feature` command may commit and push automatically, but
+  only to the current feature branch. It must never commit, push, or merge
+  into `main` on its own — opening and merging the Pull Request stays a
+  manual step for the developer.   
 
 ## Working Style
 
