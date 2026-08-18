@@ -25,7 +25,12 @@
       "id": "T9t1u1aq2ao"
     }
   ],
-  "projects": [],
+  "projects": [
+    {
+      "name": "Teste 1",
+      "id": "QvxoyiZvMuU"
+    }
+  ],
   "templates": [
     {
       "name": "ICTL 1.0",

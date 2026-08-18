@@ -143,3 +143,4 @@ vite.config.ts.timestamp-*
 .vite/
 
 React + TypeScript Interview Notes.md
+.env.local

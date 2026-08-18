@@ -4,13 +4,16 @@ import { login } from "@/features/auth/authApi";
 import { ApiError } from "../../apiError";
 import type { AuthSession } from "./user";
 
+const DEFAULT_USER = import.meta.env.VITE_USER_DEFAULT_EMAIL;
+const DEFAULT_PASSOWRD = import.meta.env.VITE_USER_DEFAULT_PASSWORD;
+
 interface LoginFormProps {
   onSuccess: (session: AuthSession) => void;
 }
 
 function LoginForm({ onSuccess }: LoginFormProps) {
-  const [email, setEmail] = useState("geraldo@cms.dev");
-  const [password, setPassword] = useState("senha123");
+  const [email, setEmail] = useState(DEFAULT_USER);
+  const [password, setPassword] = useState(DEFAULT_PASSOWRD);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 

@@ -8,20 +8,9 @@ import {
   type ReactNode,
 } from "react";
 import { authReducer } from "./authReducer";
+import { readStoredSession, SESSION_STORAGE_KEY } from "./session";
+import { AUTH_UNAUTHORIZED_EVENT } from "./authEvents";
 import type { AuthSession } from "./user";
-
-const SESSION_STORAGE_KEY = "cms.session";
-
-function loadStoredSession(): AuthSession | null {
-  const raw = localStorage.getItem(SESSION_STORAGE_KEY);
-  if (!raw) return null;
-
-  try {
-    return JSON.parse(raw) as AuthSession;
-  } catch {
-    return null;
-  }
-}
 
 interface AuthContextValue {
   session: AuthSession | null;
@@ -37,9 +26,10 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [state, dispatch] = useReducer(authReducer, undefined, () => ({
-    session: loadStoredSession(),
+    session: readStoredSession(),
   }));
 
+  // Keep localStorage in sync with the current session.
   useEffect(() => {
     if (state.session) {
       localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(state.session));
@@ -47,6 +37,37 @@ export function AuthProvider({ children }: AuthProviderProps) {
       localStorage.removeItem(SESSION_STORAGE_KEY);
     }
   }, [state.session]);
+
+  // Automatic logout at the exact expiration moment (already had this).
+  useEffect(() => {
+    if (!state.session) return;
+
+    const msUntilExpiry =
+      new Date(state.session.expiresAt).getTime() - Date.now();
+
+    if (msUntilExpiry <= 0) {
+      dispatch({ type: "LOGOUT" });
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
+      dispatch({ type: "LOGOUT" });
+    }, msUntilExpiry);
+
+    return () => clearTimeout(timeoutId);
+  }, [state.session]);
+
+  // NEW: log out immediately if any API call reports 401 — e.g. the token
+  // was revoked server-side before its stated expiration.
+  useEffect(() => {
+    function handleUnauthorized() {
+      dispatch({ type: "LOGOUT" });
+    }
+
+    window.addEventListener(AUTH_UNAUTHORIZED_EVENT, handleUnauthorized);
+    return () =>
+      window.removeEventListener(AUTH_UNAUTHORIZED_EVENT, handleUnauthorized);
+  }, []);
 
   const login = useCallback((session: AuthSession) => {
     dispatch({ type: "LOGIN", payload: session });
